@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gradient Toggle Switch</title>
+  <style>
+    body {
+      background-color: #1e1e2f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .switch {
+      position: relative;
+      width: 90px;
+      height: 40px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc; /* default gray background */
+      border-radius: 40px;
+      overflow: hidden;
+      transition: background-color 0.4s ease;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 0;
+      background: linear-gradient(45deg, 
+      #d000ff, #ff5ca8);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+      z-index: 1;
+    }
+
+    input:checked + .slider::before {
+      transform: scaleX(1);
+    }
+
+    .slider::after {
+      content: "";
+      position: absolute;
+      height: 36px;
+      width: 36px;
+      left: 2px;
+      top: 2px;
+      background-color: white;
+      border-radius: 50%;
+      z-index: 2;
+      transition: transform 0.4s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+
+    input:checked + .slider::after {
+      transform: translateX(50px);
+    }
+
+    .label-text {
+      color: white;
+      margin-left: 15px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="toggle-container">
+    <label class="switch">
+      <input type="checkbox" 
+      id="gradientToggle">
+      <span class="slider"></span>
+    </label>
+   
+  </div>
+</body>
+</html>

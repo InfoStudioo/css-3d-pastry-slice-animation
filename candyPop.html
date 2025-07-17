@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Candy Explosion – Multidirectional Bouncers</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #2a004f, #000000);
+      overflow: hidden;
+    }
+
+    .candy {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, #ff69b4);
+      box-shadow: 0 0 30px #fff;
+      z-index: 2;
+    }
+
+    .particle {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      box-shadow: 0 0 12px #fff;
+      animation: burst 1.5s ease-out forwards;
+    }
+
+    @keyframes burst {
+      to {
+        transform: translate(var(--x), var(--y)) rotate(720deg) scale(0.5);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<script>
+  const directions = [
+    { x: -100, y: window.innerHeight / 2 },                      // Left
+    { x: window.innerWidth + 100, y: window.innerHeight / 2 },   // Right
+    { x: window.innerWidth / 2, y: -100 },                        // Top
+    { x: window.innerWidth / 2, y: window.innerHeight + 100 },   // Bottom
+    { x: -100, y: -100 },                                         // Top Left
+    { x: window.innerWidth + 100, y: -100 },                      // Top Right
+    { x: -100, y: window.innerHeight + 100 },                     // Bottom Left
+    { x: window.innerWidth + 100, y: window.innerHeight + 100 }, // Bottom Right
+  ];
+
+  const gradients = [
+    "radial-gradient(circle at 30% 30%, #fff, #ff69b4)",
+    "radial-gradient(circle at 30% 30%, #fff, #00c3ff)",
+    "radial-gradient(circle at 30% 30%, #fff, #ff8c00)",
+    "radial-gradient(circle at 30% 30%, #fff, #32cd32)",
+    "radial-gradient(circle at 30% 30%, #fff, #9370db)",
+    "radial-gradient(circle at 30% 30%, #fff, #ff1493)",
+    "radial-gradient(circle at 30% 30%, #fff, #00ff7f)",
+    "radial-gradient(circle at 30% 30%, #fff, #ffd700)"
+  ];
+
+  function randomGradient() {
+    return gradients[Math.floor(Math.random() * gradients.length)];
+  }
+
+  function createCandy(x, y) {
+    const candy = document.createElement('div');
+    candy.className = 'candy';
+    candy.style.left = `${x}px`;
+    candy.style.top = `${y}px`;
+    candy.style.background = randomGradient();
+    document.body.appendChild(candy);
+    return candy;
+  }
+
+  function createParticles(x, y) {
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const size = Math.random() * 10 + 10; // size: 10px to 20px
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+
+      const hue = Math.floor(Math.random() * 360);
+      const color = `hsl(${hue}, 100%, 70%)`;
+      particle.style.background = color;
+      particle.style.boxShadow = `0 0 12px ${color}, 0 0 24px ${color}`;
+      particle.style.left = `${x}px`;
+      particle.style.top = `${y}px`;
+
+      const angle = Math.random() * 2 * Math.PI;
+      const radius = Math.random() * 120 + 30;
+      particle.style.setProperty('--x', `${Math.cos(angle) * radius}px`);
+      particle.style.setProperty('--y', `${Math.sin(angle) * radius}px`);
+
+      document.body.appendChild(particle);
+      setTimeout(() => particle.remove(), 1500); // matches animation duration
+    }
+  }
+
+  function bouncePath(fromX, fromY, toX, toY) {
+    const dx = (toX - fromX) / 3;
+    const dy = (toY - fromY) / 3;
+    return [
+      { left: `${fromX}px`, top: `${fromY}px` },
+      { left: `${fromX + dx}px`, top: `${fromY + dy - 40}px` },
+      { left: `${fromX + 2 * dx}px`, top: `${fromY + 2 * dy + 40}px` },
+      { left: `${toX}px`, top: `${toY}px` }
+    ];
+  }
+
+  function launchCandyFromDirection(x, y) {
+    const centerX = window.innerWidth / 2 - 30;
+    const centerY = window.innerHeight / 2 - 30;
+
+    const candy = createCandy(x, y);
+
+    candy.animate(
+      bouncePath(x, y, centerX, centerY),
+      {
+        duration: 1200,
+        easing: 'ease-in-out',
+        fill: 'forwards'
+      }
+    );
+
+    setTimeout(() => {
+      candy.remove();
+      createParticles(centerX + 30, centerY + 30);
+    }, 1200);
+  }
+
+  function launchAllCandies() {
+    directions.forEach(dir => {
+      launchCandyFromDirection(dir.x, dir.y);
+    });
+  }
+
+  setInterval(launchAllCandies, 2500);
+</script>
+
+</body>
+</html>

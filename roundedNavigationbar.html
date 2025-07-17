@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ring Navigation</title>
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet"
+   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(to bottom, #1e1f26, #2b2d42);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+    }
+
+    .ring-nav {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #9b59b6, #6a1b9a);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 20px rgba(155, 89, 182, 0.6);
+    }
+
+    .icon {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: #ffffff;
+      color: #6a1b9a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      font-size: 20px;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .home   { top: 10px; left: 50%; transform: translateX(-50%); }
+    .user   { top: 50%; left: 10px; transform: translateY(-50%); }
+    .info   { bottom: 10px; left: 50%; transform: translateX(-50%); }
+    .bank   { top: 50%; right: 10px; transform: translateY(-50%); }
+
+    .toggle-btn {
+      width: 60px;
+      height: 60px;
+      background: #ffffff;
+      color: #6a1b9a;
+      border-radius: 50%;
+      font-size: 26px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .ring-nav.collapsed .icon {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.5);
+    }
+
+    .ring-nav.collapsed {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .toggle-btn i {
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ring-nav collapsed" id="ringNav">
+    <div class="icon home"><i class="fas fa-home"></i></div>
+    <div class="icon user"><i class="fas fa-user"></i></div>
+    <div class="icon info"><i class="fas fa-info-circle"></i></div>
+    <div class="icon bank"><i class="fas fa-university"></i></div>
+    <div class="toggle-btn" onclick="toggleRing()">
+      <i class="fas fa-bars" id="toggleIcon"></i>
+    </div>
+  </div>
+
+  <script>
+    function toggleRing() {
+      const ring = document.getElementById('ringNav');
+      const icon = document.getElementById('toggleIcon');
+      ring.classList.toggle('collapsed');
+
+      if (ring.classList.contains('collapsed')) {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      } else {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      }
+    }
+  </script>
+
+</body>
+</html>
